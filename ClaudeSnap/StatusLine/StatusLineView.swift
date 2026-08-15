@@ -4,19 +4,43 @@ import AppKit
 /// right in whatever order `StatusLineController` hands over.
 final class StatusLineView: FlippedView {
     private let stack = NSStackView()
+    private let logo = NSImageView()
+    private let logoDivider = NSView()
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         wantsLayer = true
         layer?.backgroundColor = NSColor.black.withAlphaComponent(0.24).cgColor
 
+        // Fixed brand mark, always first — not a toggleable/reorderable segment like the rest.
+        logo.image = MenuBarIconRenderer.markImage(color: NSColor.white.withAlphaComponent(0.5))
+        logo.imageScaling = .scaleProportionallyUpOrDown
+        logo.translatesAutoresizingMaskIntoConstraints = false
+
+        logoDivider.wantsLayer = true
+        logoDivider.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.07).cgColor
+        logoDivider.translatesAutoresizingMaskIntoConstraints = false
+
         stack.orientation = .horizontal
         stack.spacing = 0
         stack.alignment = .centerY
         stack.translatesAutoresizingMaskIntoConstraints = false
+
+        addSubview(logo)
+        addSubview(logoDivider)
         addSubview(stack)
         NSLayoutConstraint.activate([
-            stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+            logo.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+            logo.centerYAnchor.constraint(equalTo: centerYAnchor),
+            logo.widthAnchor.constraint(equalToConstant: 13),
+            logo.heightAnchor.constraint(equalToConstant: 13),
+
+            logoDivider.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 10),
+            logoDivider.widthAnchor.constraint(equalToConstant: 0.5),
+            logoDivider.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            logoDivider.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+
+            stack.leadingAnchor.constraint(equalTo: logoDivider.trailingAnchor, constant: 4),
             stack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -10),
             stack.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
