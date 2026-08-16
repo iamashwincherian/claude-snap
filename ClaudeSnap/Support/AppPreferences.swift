@@ -53,14 +53,6 @@ final class AppPreferences: ObservableObject {
     @Published private(set) var lastWorkingDirectory: String? { didSet { defaults.set(lastWorkingDirectory, forKey: Keys.lastWorkingDirectory) } }
     /// Explicit user override for where sessions open when nothing else resolves.
     @Published var defaultWorkingDirectory: String? { didSet { defaults.set(defaultWorkingDirectory, forKey: Keys.defaultWorkingDirectory) } }
-    /// Whether the first-launch "pick a project folder" prompt has already run — so a user who
-    /// dismisses it isn't asked again on every session that would otherwise land in `$HOME`.
-    private(set) var hasPromptedInitialDirectory: Bool
-
-    func markPromptedInitialDirectory() {
-        hasPromptedInitialDirectory = true
-        defaults.set(true, forKey: Keys.hasPromptedInitialDirectory)
-    }
 
     /// Where a session opens when neither Finder nor a focused editor document resolves.
     ///
@@ -94,7 +86,6 @@ final class AppPreferences: ObservableObject {
         static let liveStatusLineEnabled = "liveStatusLineEnabled"
         static let lastWorkingDirectory = "lastWorkingDirectory"
         static let defaultWorkingDirectory = "defaultWorkingDirectory"
-        static let hasPromptedInitialDirectory = "hasPromptedInitialDirectory"
     }
 
     init(defaults: UserDefaults = .standard) {
@@ -119,6 +110,5 @@ final class AppPreferences: ObservableObject {
         let storedLast = defaults.string(forKey: Keys.lastWorkingDirectory)
         lastWorkingDirectory = storedLast == NSHomeDirectory() ? nil : storedLast
         defaultWorkingDirectory = defaults.string(forKey: Keys.defaultWorkingDirectory)
-        hasPromptedInitialDirectory = defaults.bool(forKey: Keys.hasPromptedInitialDirectory)
     }
 }
