@@ -52,6 +52,11 @@ fi
 echo "Installing to $INSTALL_DIR..."
 cp -r "$APP_PATH" "$INSTALL_DIR/"
 
+# ClaudeSnap isn't notarized (no paid Apple Developer account), so Gatekeeper blocks the
+# quarantine flag curl/unzip leaves behind with a misleading "damaged" error. Strip it —
+# this script downloaded straight from the GitHub release, so the app is what it claims to be.
+xattr -cr "$INSTALL_DIR/ClaudeSnap.app"
+
 # Update Finder/Dock icon cache
 killall Finder 2>/dev/null || true
 killall Dock 2>/dev/null || true

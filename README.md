@@ -17,6 +17,11 @@ chmod +x install.sh
 ./install.sh
 ```
 
+> **Note:** ClaudeSnap isn't notarized by Apple (that requires a paid Developer account), so if you install it manually instead of via `install.sh` — e.g. downloading the zip from a browser and dragging it to Applications — macOS Gatekeeper may say the app "is damaged and can't be opened." It isn't actually damaged; that's just Gatekeeper reacting to the quarantine flag on an unnotarized app. Fix it with:
+> ```bash
+> xattr -cr /Applications/ClaudeSnap.app
+> ```
+
 ### Build from Source
 
 **Requirements:**
