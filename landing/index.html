@@ -3,130 +3,133 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ClaudeSnap — Claude Code in your menu bar</title>
-<meta name="description" content="A minimal macOS status bar app for Claude Code. Quake-style dropdown terminal on Ctrl+`, live usage tracking, and session management. Free & open source.">
+<title>ClaudeSnap — Claude in Your Menu Bar</title>
+<meta name="description" content="Live usage tracking and instant terminal access (Ctrl+`) for Claude Code, right from your macOS menu bar. Free & open source.">
 <link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="page">
 
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="#" class="brand"><img src="assets/icon.png" alt=""> ClaudeSnap</a>
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#faq">FAQ</a>
-      <a href="https://github.com/iamashwincherian/claude-snap">GitHub</a>
-      <a href="#install" class="btn btn-small">Install</a>
+  <header class="site-header">
+    <div class="brand">
+      <img src="assets/icon.png" alt="" width="24" height="24">
+      <span class="brand-name">ClaudeSnap</span>
     </div>
-  </div>
-</nav>
+    <nav class="site-nav">
+      <a href="https://github.com/iamashwincherian/claude-snap" class="nav-github">GitHub</a>
+      <a href="https://github.com/iamashwincherian/claude-snap/releases/latest" class="nav-install">Install</a>
+    </nav>
+  </header>
 
-<header class="hero">
-  <span class="pill">Free &amp; Open Source</span>
-  <h1>Claude Code, <span class="accent">one keystroke away</span></h1>
-  <p class="lede">A minimal macOS menu bar app for Claude Code. Hit <kbd>Ctrl+`</kbd> anywhere for a Quake-style dropdown terminal, with live usage tracking and per-project session memory.</p>
-  <div class="cta-row">
-    <a href="#install" class="btn btn-primary">Install now</a>
-    <a href="https://github.com/iamashwincherian/claude-snap" class="btn btn-secondary">View on GitHub</a>
-  </div>
-  <div class="trust-row">
-    <span>Native Swift</span>
-    <span>&middot;</span>
-    <span>macOS 13+</span>
-    <span>&middot;</span>
-    <span>No telemetry</span>
-  </div>
-</header>
+  <main class="main">
 
-<section class="mock">
-  <div class="mock-window">
-    <div class="mock-titlebar">
-      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-      <span class="mock-title">ClaudeSnap</span>
-    </div>
-    <div class="mock-body">
-      <div class="mock-row">
-        <span>Session usage</span>
-        <span class="mock-value">42%</span>
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="eyebrow-dot"></span>
+          <span>Native Swift &middot; macOS 13+ &middot; No telemetry</span>
+        </div>
+        <h1 class="headline">Claude in Your <span class="accent">Menu&nbsp;Bar</span></h1>
+        <p class="subhead">Live usage tracking + instant terminal access (<span class="mono-inline">Ctrl+`</span>) for Claude Code</p>
+        <div class="hero-actions">
+          <a href="https://github.com/iamashwincherian/claude-snap/releases/latest" class="hero-cta">
+            Install
+            <span class="hero-cta-arrow">↓</span>
+          </a>
+          <div class="install-row">
+            <span class="install-prompt">$</span>
+            <code id="install-command">curl -s https://raw.githubusercontent.com/iamashwincherian/claude-snap/main/install.sh | bash</code>
+            <button type="button" id="copy-btn" class="copy-btn">Copy</button>
+          </div>
+          <div class="install-note">Installs the latest release to /Applications and clears the Gatekeeper quarantine flag.</div>
+        </div>
       </div>
-      <div class="mock-bar"><div class="mock-bar-fill" style="width:42%"></div></div>
-      <div class="mock-row muted">
-        <span>Working directory</span>
-        <span>~/workspace/claude-snap</span>
+
+      <div class="mock">
+        <div class="mock-menubar">
+          <div class="mock-menubar-left">
+            <span class="mock-menubar-dot"></span>
+            <span class="mock-menubar-app">Claude Code</span>
+            <span>File</span><span>Edit</span><span>View</span><span>Window</span>
+          </div>
+          <div class="mock-menubar-right">
+            <div class="mock-ring">
+              <svg width="18" height="18" viewBox="0 0 18 18">
+                <circle cx="9" cy="9" r="7" fill="none" stroke="rgba(255,255,255,0.26)" stroke-width="2"/>
+                <path id="usage-arc" d="" fill="none" stroke="#D97757" stroke-width="2" stroke-linecap="round"/>
+                <path d="M9.6121 7.2077L13.5705 7.02Q13.8333 6.7915 13.5705 6.563L9.6121 6.3752ZM9.322 7.458L12.8439 9.2746Q13.1857 9.2081 13.0724 8.8788L9.7382 6.7371ZM8.9456 7.5297L11.0873 10.8639Q11.4166 10.9772 11.4831 10.6354L9.6665 7.1135ZM8.5838 7.4036L8.7715 11.362Q9 11.6248 9.2285 11.362L9.4162 7.4036ZM8.3335 7.1135L6.5169 10.6354Q6.5834 10.9772 6.9127 10.8639L9.0544 7.5297ZM8.2618 6.7371L4.9276 8.8788Q4.8143 9.2081 5.1561 9.2746L8.678 7.458ZM8.3879 6.3752L4.4295 6.563Q4.1667 6.7915 4.4295 7.02L8.3879 7.2077Z" fill="rgba(255,255,255,0.9)"/>
+              </svg>
+              <span class="usage-label">34%</span>
+            </div>
+            <span class="mono-inline mock-clock">11:22</span>
+          </div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-terminal">
+            <div class="mock-terminal-titlebar">
+              <span class="mono-inline">~/dev/claudesnap</span>
+              <span class="mono-inline mock-hotkey">CTRL + `</span>
+            </div>
+            <div class="mock-terminal-lines">
+              <div class="mock-line"><span class="mock-prompt-glyph">❯</span><span class="mock-line-bright">claude "add usage thresholds to preferences"</span></div>
+              <div class="mock-line-dim">● Reading StatusBarController.swift</div>
+              <div class="mock-line-dim">● Editing AppPreferences.swift</div>
+              <div class="mock-line"><span class="mock-line-dim">↳</span><span class="mock-line-green">2 files changed, 34 insertions</span></div>
+              <div class="mock-line mock-cursor-row"><span class="mock-prompt-glyph">❯</span><span class="mock-cursor"></span></div>
+            </div>
+            <div class="mock-statusbar">
+              <span><span class="mock-line-dim">◧</span>claude-snap</span>
+              <span><span class="mock-line-dim">⑂</span><span class="mock-branch">main</span></span>
+              <span class="mock-amber">●2</span>
+              <span class="mock-green">◔ <span class="usage-label">34%</span> &middot; resets 4:30p</span>
+              <span><span class="mock-line-dim">✳</span>Sonnet 4.5</span>
+              <span class="mock-green">◍22%</span>
+              <span><span class="mock-line-dim">$</span>0.84</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="mock-prompt">$ claude<span class="cursor">▍</span></div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class="features" id="features">
-  <h2>Simple by design</h2>
-  <p class="section-sub">Everything you need, nothing you don't</p>
-  <div class="feature-grid">
-    <div class="feature">
-      <h3>Instant dropdown terminal</h3>
-      <p>Ctrl+` slides a Claude Code terminal down from any app, anywhere. Press again to retract.</p>
-    </div>
-    <div class="feature">
-      <h3>Live usage in the menu bar</h3>
-      <p>See your 5-hour session usage at a glance — glyph, ring, text, or full display styles.</p>
-    </div>
-    <div class="feature">
-      <h3>Working directory memory</h3>
-      <p>Remembers your last project folder so Claude Code launches trusted, every time — no repeated prompts.</p>
-    </div>
-    <div class="feature">
-      <h3>It's just Claude Code</h3>
-      <p>The dropdown execs <code>claude</code> directly — no wrapper process, no extra layer between you and the CLI.</p>
-    </div>
-    <div class="feature">
-      <h3>Privacy first</h3>
-      <p>No analytics, no telemetry. Usage is read from your local Keychain credentials, nothing leaves your Mac.</p>
-    </div>
-    <div class="feature">
-      <h3>Lightweight</h3>
-      <p>A native Swift status bar app. Minimal CPU and memory footprint, built for Apple Silicon and Intel.</p>
-    </div>
-  </div>
-</section>
+    <section class="features">
+      <div class="feature">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#D97757" stroke-width="1.4" stroke-linecap="round"><path d="M3 15V9M8 15V4M13 15V11M18 15v-4"/></svg>
+        <div class="feature-title">Live token usage</div>
+        <div class="feature-desc">Session usage as a glyph, ring, text, or full readout in the menu bar.</div>
+      </div>
+      <div class="feature">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#D97757" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3.5" width="16" height="13" rx="2.5"/><path d="M6 8l2.5 2.2L6 12.4M10.5 13h3.5"/></svg>
+        <div class="feature-title">Quake-style terminal</div>
+        <div class="feature-desc">Hit <span class="mono-inline">Ctrl+`</span> in any app to drop a PTY running <span class="mono-inline">claude</span> — no wrapper.</div>
+      </div>
+      <div class="feature">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#D97757" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5A2 2 0 014.5 4.5h3l1.8 2h6.2a2 2 0 012 2v6a1.5 1.5 0 01-1.5 1.5H4a1.5 1.5 0 01-1.5-1.5z"/><path d="M10 10.5v3.5"/></svg>
+        <div class="feature-title">Directory persistence</div>
+        <div class="feature-desc">Reopens in your last project folder, so Claude Code launches trusted.</div>
+      </div>
+      <div class="feature">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#D97757" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M6.5 10.2l2.4 2.3 4.6-4.8"/></svg>
+        <div class="feature-title">Nothing to sign into</div>
+        <div class="feature-desc">Reads Claude Code's own Keychain credentials. No analytics, no telemetry.</div>
+      </div>
+    </section>
 
-<section class="install" id="install">
-  <h2>Install</h2>
-  <div class="code-block">
-    <code>curl -s https://raw.githubusercontent.com/iamashwincherian/claude-snap/main/install.sh | bash</code>
-  </div>
-  <p class="install-note">Or build from source — see the <a href="https://github.com/iamashwincherian/claude-snap#build-from-source">README</a>.</p>
-</section>
+  </main>
 
-<section class="faq" id="faq">
-  <h2>Frequently Asked Questions</h2>
-  <div class="faq-item">
-    <h3>Why does macOS say the app is "damaged"?</h3>
-    <p>ClaudeSnap isn't notarized by Apple (that requires a paid developer account). If you install manually instead of via <code>install.sh</code>, Gatekeeper reacts to the quarantine flag. Run <code>xattr -cr /Applications/ClaudeSnap.app</code> to fix it — the app isn't actually damaged.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Where does usage data come from?</h3>
-    <p>ClaudeSnap reads Claude Code's own OAuth token from your Keychain and queries Anthropic's usage endpoint directly. Nothing is sent to a third-party server.</p>
-  </div>
-  <div class="faq-item">
-    <h3>Does it work if the usage endpoint changes?</h3>
-    <p>The usage endpoint is unofficial and reverse-engineered. If it changes shape or disappears, ClaudeSnap degrades gracefully to "unavailable" rather than breaking — your terminal still works fine.</p>
-  </div>
-  <div class="faq-item">
-    <h3>What permissions does it need?</h3>
-    <p>Accessibility permissions are needed only for the global Ctrl+` hotkey to work outside the app itself.</p>
-  </div>
-</section>
+  <footer class="site-footer">
+    <span>Built for Claude Code &bull; Open source</span>
+    <span class="footer-links">
+      <a href="https://github.com/iamashwincherian/claude-snap" class="footer-link">GitHub</a>
+      <a href="https://github.com/iamashwincherian/claude-snap/blob/main/README.md" class="footer-link">Docs</a>
+      <a href="https://github.com/iamashwincherian/claude-snap/issues" class="footer-link">Issues</a>
+    </span>
+  </footer>
 
-<footer class="footer">
-  <p>Built for the Claude Code community.</p>
-  <div class="footer-links">
-    <a href="https://github.com/iamashwincherian/claude-snap">GitHub</a>
-    <a href="https://github.com/iamashwincherian/claude-snap/blob/main/README.md">Docs</a>
-    <a href="https://github.com/iamashwincherian/claude-snap/issues">Issues</a>
-  </div>
-</footer>
-
+</div>
+<script src="script.js"></script>
 </body>
 </html>
