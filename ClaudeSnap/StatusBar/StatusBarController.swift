@@ -16,14 +16,16 @@ final class StatusBarController: NSObject {
     private let statusItem: NSStatusItem
     private let preferences: AppPreferences
     private let poller: UsagePoller
+    private let workingStateWatcher: ClaudeWorkingStateWatcher
     private var cancellables = Set<AnyCancellable>()
     private var appearanceObservation: NSKeyValueObservation?
     private var workingPulseTimer: Timer?
     private var pulseOn = false
 
-    init(preferences: AppPreferences, poller: UsagePoller) {
+    init(preferences: AppPreferences, poller: UsagePoller, workingStateWatcher: ClaudeWorkingStateWatcher) {
         self.preferences = preferences
         self.poller = poller
+        self.workingStateWatcher = workingStateWatcher
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         super.init()
 
@@ -34,8 +36,14 @@ final class StatusBarController: NSObject {
 
         poller.$snapshot
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] snapshot in self?.updateWorkingPulse(snapshot.isWorking); self?.render() }
+            .sink { [weak self] _ in self?.render() }
             .store(in: &cancellables)
+
+        workingStateWatcher.onChange = { [weak self] in
+            guard let self else { return }
+            self.updateWorkingPulse(self.workingStateWatcher.isWorking)
+            self.render()
+        }
 
         preferences.$iconStyle
             .receive(on: DispatchQueue.main)
@@ -96,7 +104,7 @@ final class StatusBarController: NSObject {
         workingPulseTimer?.invalidate()
         workingPulseTimer = nil
         pulseOn = false
-        guard isWorking, preferences.iconStyle == .glyph else { return }
+        guard isWorking else { return }
         workingPulseTimer = Timer.scheduledTimer(withTimeInterval: 0.7, repeats: true) { [weak self] _ in
             Task { @MainActor in
                 self?.pulseOn.toggle()
@@ -107,27 +115,55 @@ final class StatusBarController: NSObject {
 
     private func render() {
         guard let button = statusItem.button else { return }
-        var usage = poller.snapshot
+        let usage = poller.snapshot
         let style = preferences.iconStyle
         let isLight = isLightMenuBar(button: button)
 
-        if usage.isWorking, style == .glyph, !pulseOn {
-            // Breathing dot: alternate opacity by skipping the draw every other tick rather than
-            // animating the NSImage itself.
-            usage.isWorking = false
-        }
-
-        button.image = MenuBarIconRenderer.image(usage: usage, style: style, isLightMenuBar: isLight)
-        button.imagePosition = style == .glyph || style == .ring ? .imageOnly : .imageLeft
+        let title = NSMutableAttributedString()
+        var hasContent = false
+        let gap = NSAttributedString(string: " ")
 
         switch style {
         case .glyph, .ring:
-            button.attributedTitle = NSAttributedString(string: "")
+            break
         case .text:
-            button.attributedTitle = attributedText(usage: poller.snapshot, includeReset: false, isLight: isLight)
+            let text = attributedText(usage: usage, includeReset: false, isLight: isLight)
+            if text.length > 0 {
+                if hasContent { title.append(gap) }
+                title.append(text)
+                hasContent = true
+            }
         case .full:
-            button.attributedTitle = attributedText(usage: poller.snapshot, includeReset: true, isLight: isLight)
+            let text = attributedText(usage: usage, includeReset: true, isLight: isLight)
+            if text.length > 0 {
+                if hasContent { title.append(gap) }
+                title.append(text)
+                hasContent = true
+            }
         }
+
+        if workingStateWatcher.isWorking {
+            if hasContent { title.append(gap) }
+            title.append(workingDotAttachment())
+        }
+
+        button.image = MenuBarIconRenderer.image(usage: usage, style: style, isLightMenuBar: isLight)
+        button.imagePosition = title.length == 0 ? .imageOnly : .imageLeft
+        button.attributedTitle = title
+    }
+
+    /// The working dot lives inside the status item's own title — trailing the percentage — rather
+    /// than in a second `NSStatusItem`: the logo and percentage are one item, so a separate item
+    /// would read as an unrelated third icon (and macOS orders items by persisted position, not by
+    /// creation, so it wouldn't reliably stay adjacent anyway).
+    ///
+    /// The image keeps its size while `pulseOn` blanks it, so the breathing animation doesn't
+    /// change the item's width every tick.
+    private func workingDotAttachment() -> NSAttributedString {
+        let attachment = NSTextAttachment()
+        attachment.image = MenuBarIconRenderer.workingIndicatorImage(pulseOn: pulseOn)
+        attachment.bounds = CGRect(x: 0, y: 0, width: MenuBarIconRenderer.workingDotSize.width, height: MenuBarIconRenderer.workingDotSize.height)
+        return NSAttributedString(attachment: attachment)
     }
 
     /// Unavailable (including a transient rate limit — see `UsagePoller`) renders as just the bare

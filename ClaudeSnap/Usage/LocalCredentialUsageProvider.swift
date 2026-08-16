@@ -44,7 +44,7 @@ struct LocalCredentialUsageProvider: UsageProvider {
               let percent = window.utilization else { return nil }
 
         let resetDate = window.resetsAt.flatMap(Self.parseResetDate)
-        return UsageSnapshot(percentUsed: percent, windowResetsAt: resetDate, isWorking: false, isAvailable: true)
+        return UsageSnapshot(percentUsed: percent, windowResetsAt: resetDate, isAvailable: true)
     }
 
     private static func parseResetDate(_ string: String) -> Date? {

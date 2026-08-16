@@ -29,6 +29,7 @@
 		9989CF6344FE36E62A46A41C /* DropdownPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF45AC67ABD442FFF11F5C6 /* DropdownPanel.swift */; };
 		9A54F84A0DA08E9396351A31 /* ScreenLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52376B0B5C6A3D75AFCE61E /* ScreenLocator.swift */; };
 		A3512258DECE17BD8F067FC6 /* ClaudeCodeStatusLineBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926EEE91B02DB8AE327CB964 /* ClaudeCodeStatusLineBridge.swift */; };
+		61E9A7464D53495AA41B8021 /* ClaudeWorkingStateBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44A069497CBE48B885BF3001 /* ClaudeWorkingStateBridge.swift */; };
 		A6E14D1330BA9FA8A2A8F41B /* StatusLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F89AD5372899C90FD51EC8A6 /* StatusLineView.swift */; };
 		A7DFB6C3D26B9BDB72A6EB9D /* FlippedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D808B6865F8DCD139EF99EC /* FlippedView.swift */; };
 		ACBA68EA4BD35DB03738A5B3 /* LaunchAtLogin in Frameworks */ = {isa = PBXBuildFile; productRef = A63403B77067CB9AFC9DC844 /* LaunchAtLogin */; };
@@ -55,6 +56,7 @@
 		795FEE7CD362E8E048E2132D /* TerminalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalViewController.swift; sourceTree = "<group>"; };
 		804C78731C0B25856DF271F1 /* LoginShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginShell.swift; sourceTree = "<group>"; };
 		926EEE91B02DB8AE327CB964 /* ClaudeCodeStatusLineBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeStatusLineBridge.swift; sourceTree = "<group>"; };
+		44A069497CBE48B885BF3001 /* ClaudeWorkingStateBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeWorkingStateBridge.swift; sourceTree = "<group>"; };
 		97B4E599A67BC97F0984A7DE /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
 		A0DF9C2E820F9830D126DF65 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		A15F9E5E371A365D6E21A7B1 /* ClaudeSnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClaudeSnap.entitlements; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				926EEE91B02DB8AE327CB964 /* ClaudeCodeStatusLineBridge.swift */,
+				44A069497CBE48B885BF3001 /* ClaudeWorkingStateBridge.swift */,
 				D26029593FB590C2EBB61486 /* GitInspector.swift */,
 				EB24BC0E5D05D52FACEDF0B7 /* Segments.swift */,
 				68D3537F5756735855E3C6F4 /* StatusLineController.swift */,
@@ -299,6 +302,7 @@
 				874FE61810F0E6E99D0DF03A /* AppPreferences.swift in Sources */,
 				72F34BD65FB5197230412D1B /* ClaudeCodeCredentialStore.swift in Sources */,
 				A3512258DECE17BD8F067FC6 /* ClaudeCodeStatusLineBridge.swift in Sources */,
+				61E9A7464D53495AA41B8021 /* ClaudeWorkingStateBridge.swift in Sources */,
 				46353A68F51FB7BCF8544CF6 /* DesignColor.swift in Sources */,
 				05D4897304455B589E36DE9A /* DirectoryPicker.swift in Sources */,
 				9989CF6344FE36E62A46A41C /* DropdownPanel.swift in Sources */,

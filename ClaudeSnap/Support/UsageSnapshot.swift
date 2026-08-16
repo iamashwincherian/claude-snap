@@ -4,10 +4,9 @@ import AppKit
 struct UsageSnapshot: Equatable {
     var percentUsed: Double
     var windowResetsAt: Date?
-    var isWorking: Bool
     var isAvailable: Bool
 
-    static let unavailable = UsageSnapshot(percentUsed: 0, windowResetsAt: nil, isWorking: false, isAvailable: false)
+    static let unavailable = UsageSnapshot(percentUsed: 0, windowResetsAt: nil, isAvailable: false)
 }
 
 struct UsageThresholds: Equatable {

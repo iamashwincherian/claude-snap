@@ -41,19 +41,36 @@ enum MenuBarIconRenderer {
         switch style {
         case .glyph, .text, .full:
             drawMark(glyphSpokes, color: glyphColor)
-            if usage.isWorking {
-                drawWorkingDot()
-            }
         case .ring:
-            guard usage.isAvailable else {
+            if usage.isAvailable {
+                let trackColor = neutral(0.26, isLight: isLightMenuBar, lightOverride: 0.22)
+                drawRingTrack(color: trackColor, strokeWidth: strokeWidth)
+                drawArc(usage: usage, strokeWidth: strokeWidth)
+                drawMark(coreSpokes, color: glyphColor)
+            } else {
                 drawMark(glyphSpokes, color: glyphColor)
-                return
             }
-            let trackColor = neutral(0.26, isLight: isLightMenuBar, lightOverride: 0.22)
-            drawRingTrack(color: trackColor, strokeWidth: strokeWidth)
-            drawArc(usage: usage, strokeWidth: strokeWidth)
-            drawMark(coreSpokes, color: glyphColor)
         }
+    }
+
+    /// Just the amber dot, sized to sit as a text attachment at the end of the status item's title
+    /// (trailing the percentage) rather than overlaid on the glyph, whose spokes span nearly the
+    /// whole canvas and leave nowhere for a badge. Generous leading padding keeps it visually
+    /// separate from the percentage text. `pulseOn` blanks the draw — but not the size — every
+    /// other tick, giving a breathing effect without the item's width jumping as the host swaps it.
+    static let workingDotSize = NSSize(width: 16, height: 9)
+
+    static func workingIndicatorImage(pulseOn: Bool) -> NSImage {
+        let image = NSImage(size: workingDotSize, flipped: false) { rect in
+            guard !pulseOn else { return true }
+            let diameter: CGFloat = 7
+            let dotRect = CGRect(x: rect.maxX - diameter, y: rect.midY - diameter / 2, width: diameter, height: diameter)
+            DesignColor.amber.setFill()
+            NSBezierPath(ovalIn: dotRect).fill()
+            return true
+        }
+        image.isTemplate = false
+        return image
     }
 
     private static func neutral(_ darkOpacity: CGFloat, isLight: Bool, lightOverride: CGFloat? = nil) -> NSColor {
@@ -125,14 +142,6 @@ enum MenuBarIconRenderer {
         }
         color.setFill()
         path.fill()
-    }
-
-    private static func drawWorkingDot() {
-        // 5pt clay dot, top-right of the glyph. Breathing/pulse animation (1.4s) is applied by the
-        // status item host swapping this image on a short timer — see StatusBarController.
-        let dotRect = CGRect(x: 12.6, y: 3.0, width: 5, height: 5)
-        DesignColor.clay.setFill()
-        NSBezierPath(ovalIn: dotRect).fill()
     }
 
     private static func drawRingTrack(color: NSColor, strokeWidth: CGFloat) {

@@ -5,6 +5,7 @@ import SwiftUI
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private let preferences = AppPreferences.shared
     private var poller: UsagePoller!
+    private var workingStateWatcher: ClaudeWorkingStateWatcher!
     private var statusBarController: StatusBarController!
     private var dropdownController: DropdownWindowController!
     private var preferencesWindow: NSWindow?
@@ -12,6 +13,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         poller = UsagePoller(provider: LocalCredentialUsageProvider(), intervalSeconds: preferences.usagePollIntervalSeconds)
         poller.start()
+
+        ClaudeWorkingStateBridge.install()
+        workingStateWatcher = ClaudeWorkingStateWatcher()
+        workingStateWatcher.start()
 
         let dropdownController = DropdownWindowController(preferences: preferences)
         let terminalViewController = TerminalViewController(preferences: preferences, poller: poller)
@@ -21,7 +26,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         WorkingDirectoryResolver.requestAutomationPermissionIfNeeded()
 
-        let statusBarController = StatusBarController(preferences: preferences, poller: poller)
+        let statusBarController = StatusBarController(preferences: preferences, poller: poller, workingStateWatcher: workingStateWatcher)
         statusBarController.onToggle = { [weak dropdownController] in dropdownController?.toggle() }
         statusBarController.onOpenPreferences = { [weak self] in self?.openPreferences() }
         statusBarController.onQuit = { NSApp.terminate(nil) }
