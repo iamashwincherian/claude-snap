@@ -19,7 +19,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         dropdownController.embedContent(terminalViewController)
         self.dropdownController = dropdownController
 
-        WorkingDirectoryResolver.requestAccessibilityPermissionIfNeeded()
         WorkingDirectoryResolver.requestAutomationPermissionIfNeeded()
 
         let statusBarController = StatusBarController(preferences: preferences, poller: poller)

@@ -25,14 +25,14 @@ enum WorkingDirectoryResolver {
         return fallback
     }
 
-    /// Call once at launch so the system permission prompt appears proactively instead of
-    /// silently failing the first time a terminal is opened.
-    static func requestAccessibilityPermissionIfNeeded() {
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
-        _ = AXIsProcessTrustedWithOptions(options)
-    }
+    /// The accessibility permission `axFrontDocumentDirectory` uses is deliberately never
+    /// *prompted* for. A code-signature change (every rebuild, every app update) invalidates the
+    /// TCC grant, so a proactive `AXIsProcessTrustedWithOptions(prompt: true)` nags on launch
+    /// after launch with no way to satisfy it permanently. The AX lookup is only one candidate
+    /// among the picker's list now, and it already degrades silently when untrusted — so grant it
+    /// by hand in System Settings if you want it, and nothing breaks if you don't.
 
-    /// Same idea for the Finder-automation permission `finderFrontWindowDirectory` needs: fire it
+    /// The Finder-automation permission `finderFrontWindowDirectory` needs is different: fire it
     /// once at launch, off the main thread, so its TCC prompt lands before the dropdown ever
     /// shows. Otherwise the prompt appears the first time `resolve()` runs (while the dropdown is
     /// open), and answering it is a mouse click outside the panel — which the dropdown's own
