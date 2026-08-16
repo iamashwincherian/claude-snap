@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ClaudeSnap — Claude Code in your menu bar</title>
+<meta name="description" content="A minimal macOS status bar app for Claude Code. Quake-style dropdown terminal on Ctrl+`, live usage tracking, and session management. Free & open source.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="brand"><img src="assets/icon.png" alt=""> ClaudeSnap</a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/iamashwincherian/claude-snap">GitHub</a>
+      <a href="#install" class="btn btn-small">Install</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="pill">Free &amp; Open Source</span>
+  <h1>Claude Code, <span class="accent">one keystroke away</span></h1>
+  <p class="lede">A minimal macOS menu bar app for Claude Code. Hit <kbd>Ctrl+`</kbd> anywhere for a Quake-style dropdown terminal, with live usage tracking and per-project session memory.</p>
+  <div class="cta-row">
+    <a href="#install" class="btn btn-primary">Install now</a>
+    <a href="https://github.com/iamashwincherian/claude-snap" class="btn btn-secondary">View on GitHub</a>
+  </div>
+  <div class="trust-row">
+    <span>Native Swift</span>
+    <span>&middot;</span>
+    <span>macOS 13+</span>
+    <span>&middot;</span>
+    <span>No telemetry</span>
+  </div>
+</header>
+
+<section class="mock">
+  <div class="mock-window">
+    <div class="mock-titlebar">
+      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+      <span class="mock-title">ClaudeSnap</span>
+    </div>
+    <div class="mock-body">
+      <div class="mock-row">
+        <span>Session usage</span>
+        <span class="mock-value">42%</span>
+      </div>
+      <div class="mock-bar"><div class="mock-bar-fill" style="width:42%"></div></div>
+      <div class="mock-row muted">
+        <span>Working directory</span>
+        <span>~/workspace/claude-snap</span>
+      </div>
+      <div class="mock-prompt">$ claude<span class="cursor">▍</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <h2>Simple by design</h2>
+  <p class="section-sub">Everything you need, nothing you don't</p>
+  <div class="feature-grid">
+    <div class="feature">
+      <h3>Instant dropdown terminal</h3>
+      <p>Ctrl+` slides a Claude Code terminal down from any app, anywhere. Press again to retract.</p>
+    </div>
+    <div class="feature">
+      <h3>Live usage in the menu bar</h3>
+      <p>See your 5-hour session usage at a glance — glyph, ring, text, or full display styles.</p>
+    </div>
+    <div class="feature">
+      <h3>Working directory memory</h3>
+      <p>Remembers your last project folder so Claude Code launches trusted, every time — no repeated prompts.</p>
+    </div>
+    <div class="feature">
+      <h3>It's just Claude Code</h3>
+      <p>The dropdown execs <code>claude</code> directly — no wrapper process, no extra layer between you and the CLI.</p>
+    </div>
+    <div class="feature">
+      <h3>Privacy first</h3>
+      <p>No analytics, no telemetry. Usage is read from your local Keychain credentials, nothing leaves your Mac.</p>
+    </div>
+    <div class="feature">
+      <h3>Lightweight</h3>
+      <p>A native Swift status bar app. Minimal CPU and memory footprint, built for Apple Silicon and Intel.</p>
+    </div>
+  </div>
+</section>
+
+<section class="install" id="install">
+  <h2>Install</h2>
+  <div class="code-block">
+    <code>curl -s https://raw.githubusercontent.com/iamashwincherian/claude-snap/main/install.sh | bash</code>
+  </div>
+  <p class="install-note">Or build from source — see the <a href="https://github.com/iamashwincherian/claude-snap#build-from-source">README</a>.</p>
+</section>
+
+<section class="faq" id="faq">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-item">
+    <h3>Why does macOS say the app is "damaged"?</h3>
+    <p>ClaudeSnap isn't notarized by Apple (that requires a paid developer account). If you install manually instead of via <code>install.sh</code>, Gatekeeper reacts to the quarantine flag. Run <code>xattr -cr /Applications/ClaudeSnap.app</code> to fix it — the app isn't actually damaged.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Where does usage data come from?</h3>
+    <p>ClaudeSnap reads Claude Code's own OAuth token from your Keychain and queries Anthropic's usage endpoint directly. Nothing is sent to a third-party server.</p>
+  </div>
+  <div class="faq-item">
+    <h3>Does it work if the usage endpoint changes?</h3>
+    <p>The usage endpoint is unofficial and reverse-engineered. If it changes shape or disappears, ClaudeSnap degrades gracefully to "unavailable" rather than breaking — your terminal still works fine.</p>
+  </div>
+  <div class="faq-item">
+    <h3>What permissions does it need?</h3>
+    <p>Accessibility permissions are needed only for the global Ctrl+` hotkey to work outside the app itself.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Built for the Claude Code community.</p>
+  <div class="footer-links">
+    <a href="https://github.com/iamashwincherian/claude-snap">GitHub</a>
+    <a href="https://github.com/iamashwincherian/claude-snap/blob/main/README.md">Docs</a>
+    <a href="https://github.com/iamashwincherian/claude-snap/issues">Issues</a>
+  </div>
+</footer>
+
+</body>
+</html>
