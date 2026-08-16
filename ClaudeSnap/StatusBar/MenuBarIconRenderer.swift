@@ -39,12 +39,12 @@ enum MenuBarIconRenderer {
         let glyphColor = neutral(nearLimit ? 0.45 : 0.9, isLight: isLightMenuBar)
 
         switch style {
-        case .glyph:
+        case .glyph, .text, .full:
             drawMark(glyphSpokes, color: glyphColor)
             if usage.isWorking {
                 drawWorkingDot()
             }
-        case .ring, .text, .full:
+        case .ring:
             guard usage.isAvailable else {
                 drawMark(glyphSpokes, color: glyphColor)
                 return
@@ -73,7 +73,7 @@ enum MenuBarIconRenderer {
     /// `spoke(i·30°, rIn: 1.5, rOut: 11.2, wIn: 1.02, wOut: 0.56, cy: 6.4)` for i in 0..<7, pre-fit
     /// (bbox scale + translate) by the design's `fitBox`/`fitCircle` helpers — baked in here since
     /// the geometry never changes at runtime.
-    private static let glyphSpokes: [Spoke] = [
+    private static let rawGlyphSpokes: [Spoke] = [
         Spoke(a: CGPoint(x: 10.0512, y: 5.9222), b: CGPoint(x: 16.8487, y: 5.5998), control: CGPoint(x: 17.3000, y: 5.2074), d: CGPoint(x: 16.8487, y: 4.8150), e: CGPoint(x: 10.0512, y: 4.4926)),
         Spoke(a: CGPoint(x: 9.5529, y: 6.3520), b: CGPoint(x: 15.6010, y: 9.4716), control: CGPoint(x: 16.1880, y: 9.3574), d: CGPoint(x: 15.9934, y: 8.7919), e: CGPoint(x: 10.2677, y: 5.1140)),
         Spoke(a: CGPoint(x: 8.9066, y: 6.4751), b: CGPoint(x: 12.5845, y: 12.2008), control: CGPoint(x: 13.1500, y: 12.3954), d: CGPoint(x: 13.2642, y: 11.8084), e: CGPoint(x: 10.1446, y: 5.7603)),
@@ -82,6 +82,23 @@ enum MenuBarIconRenderer {
         Spoke(a: CGPoint(x: 7.7323, y: 5.1140), b: CGPoint(x: 2.0066, y: 8.7919), control: CGPoint(x: 1.8120, y: 9.3574), d: CGPoint(x: 2.3990, y: 9.4716), e: CGPoint(x: 8.4471, y: 6.3520)),
         Spoke(a: CGPoint(x: 7.9488, y: 4.4926), b: CGPoint(x: 1.1513, y: 4.8150), control: CGPoint(x: 0.7000, y: 5.2074), d: CGPoint(x: 1.1513, y: 5.5998), e: CGPoint(x: 7.9488, y: 5.9222)),
     ]
+
+    /// The design's baked coordinates only span the middle ~half of the 18pt canvas vertically
+    /// (y≈4.49–13.51), leaving the mark looking small/off wherever it's placed next to other
+    /// content. Scale up (uniformly, x and y together, so the aspect ratio is preserved) so the
+    /// mark's bounding box fills most of the canvas height, instead of papering over it with
+    /// container-level centering.
+    private static let glyphSpokes: [Spoke] = scaleToFillHeight(rawGlyphSpokes, canvas: canvasSize, fillFraction: 0.65)
+
+    private static func scaleToFillHeight(_ spokes: [Spoke], canvas: CGFloat, fillFraction: CGFloat) -> [Spoke] {
+        let xs = spokes.flatMap { [$0.a.x, $0.b.x, $0.control.x, $0.d.x, $0.e.x] }
+        let ys = spokes.flatMap { [$0.a.y, $0.b.y, $0.control.y, $0.d.y, $0.e.y] }
+        let midX = (xs.min()! + xs.max()!) / 2
+        let midY = (ys.min()! + ys.max()!) / 2
+        let scale = canvas * fillFraction / (ys.max()! - ys.min()!)
+        func apply(_ p: CGPoint) -> CGPoint { CGPoint(x: (p.x - midX) * scale + canvas / 2, y: (p.y - midY) * scale + canvas / 2) }
+        return spokes.map { Spoke(a: apply($0.a), b: apply($0.b), control: apply($0.control), d: apply($0.d), e: apply($0.e)) }
+    }
 
     private static let coreSpokes: [Spoke] = [
         Spoke(a: CGPoint(x: 9.6121, y: 7.2077), b: CGPoint(x: 13.5705, y: 7.0200), control: CGPoint(x: 13.8333, y: 6.7915), d: CGPoint(x: 13.5705, y: 6.5630), e: CGPoint(x: 9.6121, y: 6.3752)),

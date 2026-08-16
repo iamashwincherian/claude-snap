@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05D4897304455B589E36DE9A /* DirectoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AF0FBD5E277DB77704AF2A0 /* DirectoryPicker.swift */; };
 		078A1A7C9381564D7580928F /* DropdownPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43349C90DAE56AC7B45A371A /* DropdownPresentable.swift */; };
 		0D37E187AEC42E143AE88E3B /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DF9C2E820F9830D126DF65 /* HotkeyManager.swift */; };
 		0EA63DE5AA7C4F25235FD777 /* DropdownWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B47BB3F3FB2310B6058960 /* DropdownWindowController.swift */; };
@@ -24,7 +25,6 @@
 		7A0D5BC6E04514C00BD68275 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31132A62B7FBE08DFF049CE6 /* Assets.xcassets */; };
 		8597B0E645748C8C99EE5B25 /* MenuBarIconRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CA38CC44A952C7EBD45342 /* MenuBarIconRenderer.swift */; };
 		874FE61810F0E6E99D0DF03A /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B4E599A67BC97F0984A7DE /* AppPreferences.swift */; };
-		53C10225F44BDE990A3FBAAD /* DirectoryPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2992EE1EE63EF9856D304F /* DirectoryPicker.swift */; };
 		89C01A7EE3A0276CDFE662E4 /* UsageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF9B6596FAD48CBA9851028 /* UsageProvider.swift */; };
 		9989CF6344FE36E62A46A41C /* DropdownPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF45AC67ABD442FFF11F5C6 /* DropdownPanel.swift */; };
 		9A54F84A0DA08E9396351A31 /* ScreenLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52376B0B5C6A3D75AFCE61E /* ScreenLocator.swift */; };
@@ -45,6 +45,7 @@
 		0D808B6865F8DCD139EF99EC /* FlippedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlippedView.swift; sourceTree = "<group>"; };
 		31132A62B7FBE08DFF049CE6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3115707B2719CBF597CAA816 /* LocalCredentialUsageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalCredentialUsageProvider.swift; sourceTree = "<group>"; };
+		3AF0FBD5E277DB77704AF2A0 /* DirectoryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryPicker.swift; sourceTree = "<group>"; };
 		43349C90DAE56AC7B45A371A /* DropdownPresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownPresentable.swift; sourceTree = "<group>"; };
 		47B5F8FFC1C8E33F062BD4AC /* ClaudeSnap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClaudeSnap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56B47BB3F3FB2310B6058960 /* DropdownWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownWindowController.swift; sourceTree = "<group>"; };
@@ -55,7 +56,6 @@
 		804C78731C0B25856DF271F1 /* LoginShell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginShell.swift; sourceTree = "<group>"; };
 		926EEE91B02DB8AE327CB964 /* ClaudeCodeStatusLineBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeStatusLineBridge.swift; sourceTree = "<group>"; };
 		97B4E599A67BC97F0984A7DE /* AppPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPreferences.swift; sourceTree = "<group>"; };
-		6B2992EE1EE63EF9856D304F /* DirectoryPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryPicker.swift; sourceTree = "<group>"; };
 		A0DF9C2E820F9830D126DF65 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		A15F9E5E371A365D6E21A7B1 /* ClaudeSnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClaudeSnap.entitlements; sourceTree = "<group>"; };
 		A8CA38CC44A952C7EBD45342 /* MenuBarIconRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconRenderer.swift; sourceTree = "<group>"; };
@@ -94,7 +94,7 @@
 			children = (
 				97B4E599A67BC97F0984A7DE /* AppPreferences.swift */,
 				C2875C19DE775F52CA41C9FD /* DesignColor.swift */,
-				6B2992EE1EE63EF9856D304F /* DirectoryPicker.swift */,
+				3AF0FBD5E277DB77704AF2A0 /* DirectoryPicker.swift */,
 				5CE6F61FE78BE3BE01F940A2 /* UsagePoller.swift */,
 				AEF9B6596FAD48CBA9851028 /* UsageProvider.swift */,
 				BF951FB26BC8C24C6CDC492C /* UsageSnapshot.swift */,
@@ -248,6 +248,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					6E5F2D947D1D49211D3D2B39 = {
+						DevelopmentTeam = 88V8YTB2ZK;
+						ProvisioningStyle = Automatic;
+					};
 				};
 			};
 			buildConfigurationList = E46A5DFA238472FDA56A289D /* Build configuration list for PBXProject "ClaudeSnap" */;
@@ -293,10 +297,10 @@
 				D825834FA3D8475A9BAD0AAF /* AppDelegate.swift in Sources */,
 				3D6977B21393E3EDF47C754F /* AppMain.swift in Sources */,
 				874FE61810F0E6E99D0DF03A /* AppPreferences.swift in Sources */,
-				53C10225F44BDE990A3FBAAD /* DirectoryPicker.swift in Sources */,
 				72F34BD65FB5197230412D1B /* ClaudeCodeCredentialStore.swift in Sources */,
 				A3512258DECE17BD8F067FC6 /* ClaudeCodeStatusLineBridge.swift in Sources */,
 				46353A68F51FB7BCF8544CF6 /* DesignColor.swift in Sources */,
+				05D4897304455B589E36DE9A /* DirectoryPicker.swift in Sources */,
 				9989CF6344FE36E62A46A41C /* DropdownPanel.swift in Sources */,
 				078A1A7C9381564D7580928F /* DropdownPresentable.swift in Sources */,
 				0EA63DE5AA7C4F25235FD777 /* DropdownWindowController.swift in Sources */,
@@ -328,8 +332,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ClaudeSnap/Resources/ClaudeSnap.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 88V8YTB2ZK;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = ClaudeSnap/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -338,6 +346,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.ashwincherian.ClaudeSnap;
 				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -408,8 +417,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = ClaudeSnap/Resources/ClaudeSnap.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 88V8YTB2ZK;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = ClaudeSnap/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -418,6 +431,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = dev.ashwincherian.ClaudeSnap;
 				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
