@@ -172,7 +172,7 @@ final class StatusBarController: NSObject {
     private func attributedText(usage: UsageSnapshot, includeReset: Bool, isLight: Bool) -> NSAttributedString {
         guard usage.isAvailable else { return NSAttributedString(string: "") }
         let level = UsageLevel.level(for: usage.percentUsed, thresholds: preferences.thresholds)
-        var text = " " + UsageFormat.percentString(usage)
+        var text = "  " + UsageFormat.percentString(usage)
         if includeReset {
             let reset = UsageFormat.resetString(usage)
             if !reset.isEmpty { text += " · " + reset }
