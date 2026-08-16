@@ -1,4 +1,4 @@
-# ClaudeSnap
+# <img src="ClaudeSnap/Resources/octopus.svg" width="36" height="32" align="center" alt="">&nbsp;&nbsp;ClaudeSnap
 
 macOS status bar app for Claude Code — shows live usage, opens a Quake-style dropdown terminal on hotkey (Ctrl+`), and provides session management with working directory persistence.
 
