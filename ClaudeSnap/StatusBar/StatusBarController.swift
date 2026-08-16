@@ -73,6 +73,9 @@ final class StatusBarController: NSObject {
     }
 
     private func showMenu() {
+        // The breakdown is the one place the numbers are read deliberately rather than glanced at,
+        // so make sure they're current — coalesced, since the endpoint is rate limited.
+        poller.refreshIfStale()
         let menu = NSMenu()
         if appendUsageRows(to: menu) {
             menu.addItem(.separator())
@@ -188,7 +191,7 @@ final class StatusBarController: NSObject {
             title.append(workingDotAttachment())
         }
 
-        button.image = MenuBarIconRenderer.image(usage: usage, style: style, isLightMenuBar: isLight)
+        button.image = MenuBarIconRenderer.image(usage: usage, style: style, thresholds: preferences.thresholds, isLightMenuBar: isLight)
         button.imagePosition = title.length == 0 ? .imageOnly : .imageLeft
         button.attributedTitle = title
     }
@@ -212,7 +215,7 @@ final class StatusBarController: NSObject {
     /// on the terminal's own status line (`SessionSegment`), which has room to explain itself.
     private func attributedText(usage: UsageSnapshot, includeReset: Bool, isLight: Bool) -> NSAttributedString {
         guard usage.isAvailable else { return NSAttributedString(string: "") }
-        let level = UsageLevel.level(for: usage.percentUsed, thresholds: preferences.thresholds)
+        let level = UsageLevel.level(for: usage.headlinePercent, thresholds: preferences.thresholds)
         var text = "  " + UsageFormat.percentString(usage)
         if includeReset {
             let reset = UsageFormat.resetString(usage)

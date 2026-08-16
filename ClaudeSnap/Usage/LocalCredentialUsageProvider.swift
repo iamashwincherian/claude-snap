@@ -19,10 +19,14 @@ struct LocalCredentialUsageProvider: UsageProvider {
     }
 
     func fetchUsage() async -> UsageSnapshot {
-        guard let token = ClaudeCodeCredentialStore.readAccessToken() else { return .unavailable }
+        // No credential, or a stale one, is a standing local condition rather than a blip — say so
+        // so the poller doesn't back off exponentially over something a login fixes instantly.
+        guard let credential = ClaudeCodeCredentialStore.readCredential(), !credential.isExpired else {
+            return .signedOut
+        }
 
         var request = URLRequest(url: endpoint)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(credential.accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
         do {
@@ -41,20 +45,35 @@ struct LocalCredentialUsageProvider: UsageProvider {
     private func parse(_ data: Data) -> UsageSnapshot? {
         guard let decoded = try? JSONDecoder().decode(RateLimitResponse.self, from: data),
               let window = decoded.fiveHour,
-              let percent = window.utilization else { return nil }
+              let percent = window.utilization,
+              Self.isPlausiblePercent(percent) else { return nil }
 
         let extra: ExtraUsageSnapshot? = (decoded.extraUsage?.isEnabled == true)
-            ? decoded.extraUsage?.utilization.map(ExtraUsageSnapshot.init(percentUsed:))
+            ? decoded.extraUsage?.utilization.flatMap(Self.validPercent).map(ExtraUsageSnapshot.init(percentUsed:))
             : nil
 
         return UsageSnapshot(
             percentUsed: percent,
             windowResetsAt: window.resetsAt.flatMap(Self.parseResetDate),
             isAvailable: true,
-            weeklyPercentUsed: decoded.sevenDay?.utilization,
+            weeklyPercentUsed: decoded.sevenDay?.utilization.flatMap(Self.validPercent),
             weeklyResetsAt: decoded.sevenDay?.resetsAt.flatMap(Self.parseResetDate),
             extraUsage: extra
         )
+    }
+
+    /// `utilization` is documented-by-observation as 0–100. Rejecting anything else keeps garbage
+    /// (NaN, absurd magnitudes) out of `Int(_:rounded())` conversions downstream, which trap.
+    ///
+    /// ponytail: can't catch a silent switch to a 0–1 fraction — 0.87 is a legal percentage — so a
+    /// rescale would still render as "1%". Detecting that needs a second signal (e.g. cross-checking
+    /// the statusLine hook's `rate_limits`); add it only if the endpoint actually drifts that way.
+    private static func isPlausiblePercent(_ value: Double) -> Bool {
+        value.isFinite && (0...100).contains(value)
+    }
+
+    private static func validPercent(_ value: Double) -> Double? {
+        isPlausiblePercent(value) ? value : nil
     }
 
     private static func parseResetDate(_ string: String) -> Date? {

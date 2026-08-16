@@ -35,7 +35,7 @@ struct SessionSegment: StatusLineSegmentProvider {
         guard context.usage.isAvailable else {
             return StatusLineSegmentValue(icon: "◔", text: "usage unavailable")
         }
-        let level = UsageLevel.level(for: context.usage.percentUsed, thresholds: context.thresholds)
+        let level = UsageLevel.level(for: context.usage.headlinePercent, thresholds: context.thresholds)
         let reset = UsageFormat.resetString(context.usage)
         let text = reset.isEmpty ? UsageFormat.percentString(context.usage) : UsageFormat.percentString(context.usage) + " · " + reset
         return StatusLineSegmentValue(icon: "◔", text: text, iconColor: level.nsColor, textColor: level.nsColor)

@@ -9,10 +9,10 @@ enum MenuBarIconRenderer {
     private static let center = CGPoint(x: 9, y: 9)
     private static let radius: CGFloat = 7
 
-    static func image(usage: UsageSnapshot, style: MenuBarIconStyle, isLightMenuBar: Bool, strokeWidth: CGFloat = 2) -> NSImage {
+    static func image(usage: UsageSnapshot, style: MenuBarIconStyle, thresholds: UsageThresholds, isLightMenuBar: Bool, strokeWidth: CGFloat = 2) -> NSImage {
         let size = NSSize(width: canvasSize, height: canvasSize)
         let image = NSImage(size: size, flipped: true) { rect in
-            drawIcon(in: rect, usage: usage, style: style, isLightMenuBar: isLightMenuBar, strokeWidth: strokeWidth)
+            drawIcon(in: rect, usage: usage, style: style, thresholds: thresholds, isLightMenuBar: isLightMenuBar, strokeWidth: strokeWidth)
             return true
         }
         image.isTemplate = false
@@ -34,8 +34,8 @@ enum MenuBarIconRenderer {
 
     // MARK: - Drawing
 
-    private static func drawIcon(in rect: NSRect, usage: UsageSnapshot, style: MenuBarIconStyle, isLightMenuBar: Bool, strokeWidth: CGFloat) {
-        let nearLimit = usage.isAvailable && usage.percentUsed >= 100
+    private static func drawIcon(in rect: NSRect, usage: UsageSnapshot, style: MenuBarIconStyle, thresholds: UsageThresholds, isLightMenuBar: Bool, strokeWidth: CGFloat) {
+        let nearLimit = usage.isAvailable && usage.headlinePercent >= 100
         let glyphColor = neutral(nearLimit ? 0.45 : 0.9, isLight: isLightMenuBar)
 
         switch style {
@@ -45,7 +45,7 @@ enum MenuBarIconRenderer {
             if usage.isAvailable {
                 let trackColor = neutral(0.26, isLight: isLightMenuBar, lightOverride: 0.22)
                 drawRingTrack(color: trackColor, strokeWidth: strokeWidth)
-                drawArc(usage: usage, strokeWidth: strokeWidth)
+                drawArc(usage: usage, thresholds: thresholds, strokeWidth: strokeWidth)
                 drawMark(coreSpokes, color: glyphColor)
             } else {
                 drawMark(glyphSpokes, color: glyphColor)
@@ -152,15 +152,15 @@ enum MenuBarIconRenderer {
         path.stroke()
     }
 
-    private static func drawArc(usage: UsageSnapshot, strokeWidth: CGFloat) {
-        let points = arcPoints(percent: usage.percentUsed)
+    private static func drawArc(usage: UsageSnapshot, thresholds: UsageThresholds, strokeWidth: CGFloat) {
+        let points = arcPoints(percent: usage.headlinePercent)
         guard points.count > 1 else { return }
         let path = NSBezierPath()
         path.lineWidth = strokeWidth
         path.lineCapStyle = .round
         path.move(to: points[0])
         for point in points.dropFirst() { path.line(to: point) }
-        let level = UsageLevel.level(for: usage.percentUsed, thresholds: UsageThresholds())
+        let level = UsageLevel.level(for: usage.headlinePercent, thresholds: thresholds)
         level.nsColor.setStroke()
         path.stroke()
     }

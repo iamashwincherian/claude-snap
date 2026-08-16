@@ -11,7 +11,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var preferencesWindow: NSWindow?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        poller = UsagePoller(provider: LocalCredentialUsageProvider(), intervalSeconds: preferences.usagePollIntervalSeconds)
+        let poller = UsagePoller(provider: LocalCredentialUsageProvider(), intervalSeconds: preferences.usagePollIntervalSeconds)
+        self.poller = poller
         poller.start()
 
         ClaudeWorkingStateBridge.install()
@@ -26,14 +27,30 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         WorkingDirectoryResolver.requestAutomationPermissionIfNeeded()
 
+        // Opening the terminal is the moment the usage figure matters most, and after a lid-close
+        // the backoff timer can be up to ten minutes from its next tick. Both paths funnel through
+        // one closure so the hotkey behaves like the menu bar click.
+        let toggle: () -> Void = { [weak dropdownController, weak poller] in
+            poller?.refreshIfStale()
+            dropdownController?.toggle()
+        }
+
         let statusBarController = StatusBarController(preferences: preferences, poller: poller, workingStateWatcher: workingStateWatcher)
-        statusBarController.onToggle = { [weak dropdownController] in dropdownController?.toggle() }
+        statusBarController.onToggle = toggle
         statusBarController.onOpenPreferences = { [weak self] in self?.openPreferences() }
         statusBarController.onQuit = { NSApp.terminate(nil) }
         self.statusBarController = statusBarController
         dropdownController.statusItemWindow = statusBarController.buttonWindow
 
-        HotkeyManager.registerToggleHandler { [weak dropdownController] in dropdownController?.toggle() }
+        HotkeyManager.registerToggleHandler(toggle)
+
+        // Timers don't fire while the Mac is asleep, so on wake the held reading can be hours old
+        // and the next poll is however far the backoff had grown.
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didWakeNotification, object: nil, queue: .main
+        ) { [weak poller] _ in
+            Task { @MainActor in poller?.refresh() }
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { false }

@@ -77,6 +77,13 @@ open "$(find ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/D
 
 ## Testing
 
+**Usage logic self-check** (headline window selection, snapshot expiry, poller hold/backoff):
+```bash
+swiftc -o /tmp/usagechecks \
+  ClaudeSnap/Support/{UsageSnapshot,UsageProvider,UsagePoller,DesignColor}.swift \
+  Tests/UsageChecks.swift && /tmp/usagechecks
+```
+
 1. **Manual**: Open app, toggle hotkey, verify dropdown opens/closes; check menu bar icon updates
 2. **Status polling**: Monitor menu bar icon for usage % during Claude Code usage; verify exponential backoff in Console if endpoint returns 429
 3. **Trust prompt**: Set a project folder in Preferences; kill app; relaunch; verify Claude doesn't ask for trust
