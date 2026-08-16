@@ -22,23 +22,23 @@ final class TerminalViewController: NSViewController {
     private static let pickerCancelledExitCode: Int32 = 99
 
     /// A Finder-style drill-down browser: each loop iteration lists only the *current* directory's
-    /// immediate subfolders (never the whole disk), plus `.` (open here) and `..` (up). Actually
-    /// `cd`s each step so `.`/`..` and the preview resolve for free instead of needing a
-    /// hand-tracked path string. `.` breaks the loop; anything else descends and loops again.
+    /// immediate subfolders (never the whole disk), plus ". (use current directory)" and `..` (up).
+    /// Actually `cd`s each step so navigation and the preview resolve for free instead of needing
+    /// a hand-tracked path string. Selecting "." breaks the loop; anything else descends and loops.
     /// Falls back to gum filter, then the shell's builtin `select`, one level at a time either way.
-    /// Once `.` is picked, execs `claude` — reporting the directory back via OSC 7 first since
+    /// Once "." is picked, execs `claude` — reporting the directory back via OSC 7 first since
     /// Swift never learns the chosen path any other way. No selection at any level exits 99.
     private static let pickerScript = #"""
     cd ~ || exit 99
     while true; do
-      entries=$(printf '.\n..\n'; find . -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sed 's#^\./##' | sort)
+      entries=$(printf '. (use current directory)\n..\n'; find . -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sed 's#^\./##' | sort)
       if command -v fzf >/dev/null 2>&1; then
         choice=$(printf '%s\n' "$entries" | fzf \
           --prompt="$(pwd)/ " --height=100% --reverse \
           --border=rounded --border-label=' Claude Snap ' --padding=1 \
           --input-border=rounded --list-border=rounded --preview-window=hidden --no-info \
           --color=border:#c6613f,fg+:#c6613f,hl:#c6613f \
-          --header='. = open this folder | .. = up | Enter = go into folder')
+          --header='Enter = go into folder | .. = up')
       elif command -v gum >/dev/null 2>&1; then
         choice=$(printf '%s\n' "$entries" | gum filter --placeholder='Search…' --header="$(pwd)" --height=15)
       else
@@ -48,7 +48,7 @@ final class TerminalViewController: NSViewController {
         unset IFS
       fi
       [ -z "$choice" ] && exit 99
-      [ "$choice" = "." ] && break
+      [ "$choice" = ". (use current directory)" ] && break
       cd "$choice" || exit 99
     done
     dir=$(pwd)
