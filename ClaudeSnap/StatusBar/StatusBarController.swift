@@ -89,7 +89,10 @@ final class StatusBarController: NSObject {
     /// so the caller knows whether it needs a trailing separator before Preferences.
     private func appendUsageRows(to menu: NSMenu) -> Bool {
         let usage = poller.snapshot
-        guard usage.isAvailable else { return false }
+        guard usage.isAvailable else {
+            menu.addItem(withTitle: "Usage unavailable", action: nil, keyEquivalent: "")
+            return true
+        }
 
         appendUsageRow(to: menu, title: "Session (5 hour)", resetText: sessionResetText(usage.windowResetsAt), percent: usage.percentUsed)
         if let weeklyPercent = usage.weeklyPercentUsed {
