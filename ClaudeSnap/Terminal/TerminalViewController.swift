@@ -35,8 +35,8 @@ final class TerminalViewController: NSViewController {
       if command -v fzf >/dev/null 2>&1; then
         choice=$(printf '%s\n' "$entries" | fzf \
           --prompt="$(pwd)/ " --height=100% --reverse \
-          --border=rounded --border-label="[$(basename $(pwd))]" --padding=1 \
-          --input-border=rounded --list-border=rounded --preview-window=hidden --no-info \
+          --border=rounded --border-label=' Claude Snap ' --padding=1 \
+          --input-border=rounded --input-border-label="[$(basename $(pwd))]" --list-border=rounded --preview-window=hidden --no-info \
           --color=border:#c6613f,fg+:#c6613f,hl:#c6613f \
           --header='Enter = go into folder | .. = up')
       elif command -v gum >/dev/null 2>&1; then
