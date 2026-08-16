@@ -13,7 +13,9 @@ function arcPath(pct) {
 document.getElementById("usage-arc").setAttribute("d", arcPath(USAGE_PERCENT));
 
 const copyBtn = document.getElementById("copy-btn");
-const installCommand = document.getElementById("install-command").textContent;
+const installCommandEl = document.getElementById("install-command");
+const installCommand = `curl -s ${location.origin}/install.sh | bash`;
+installCommandEl.textContent = installCommand;
 let copyTimer;
 copyBtn.addEventListener("click", () => {
   navigator.clipboard?.writeText(installCommand).catch(() => {});
