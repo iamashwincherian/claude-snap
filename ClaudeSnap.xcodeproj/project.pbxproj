@@ -24,6 +24,7 @@
 		76E5A157438425DA968E7A1B /* TerminalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795FEE7CD362E8E048E2132D /* TerminalViewController.swift */; };
 		7A0D5BC6E04514C00BD68275 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31132A62B7FBE08DFF049CE6 /* Assets.xcassets */; };
 		8597B0E645748C8C99EE5B25 /* MenuBarIconRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CA38CC44A952C7EBD45342 /* MenuBarIconRenderer.swift */; };
+		3698FC7BD0604CAC9CE2F6CD /* UsageMenuRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9647AD6F913348DFB0F1349B /* UsageMenuRowView.swift */; };
 		874FE61810F0E6E99D0DF03A /* AppPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B4E599A67BC97F0984A7DE /* AppPreferences.swift */; };
 		89C01A7EE3A0276CDFE662E4 /* UsageProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF9B6596FAD48CBA9851028 /* UsageProvider.swift */; };
 		9989CF6344FE36E62A46A41C /* DropdownPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF45AC67ABD442FFF11F5C6 /* DropdownPanel.swift */; };
@@ -61,6 +62,7 @@
 		A0DF9C2E820F9830D126DF65 /* HotkeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotkeyManager.swift; sourceTree = "<group>"; };
 		A15F9E5E371A365D6E21A7B1 /* ClaudeSnap.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClaudeSnap.entitlements; sourceTree = "<group>"; };
 		A8CA38CC44A952C7EBD45342 /* MenuBarIconRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarIconRenderer.swift; sourceTree = "<group>"; };
+		9647AD6F913348DFB0F1349B /* UsageMenuRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageMenuRowView.swift; sourceTree = "<group>"; };
 		AEF9B6596FAD48CBA9851028 /* UsageProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageProvider.swift; sourceTree = "<group>"; };
 		BC73D81CEDE2F24244813E13 /* AppMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMain.swift; sourceTree = "<group>"; };
 		BF0A36E81F556C4BB8AC4CD1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				A8CA38CC44A952C7EBD45342 /* MenuBarIconRenderer.swift */,
+				9647AD6F913348DFB0F1349B /* UsageMenuRowView.swift */,
 				CCC583FE78BF8873998EBB26 /* StatusBarController.swift */,
 			);
 			path = StatusBar;
@@ -314,6 +317,7 @@
 				2D8EDF9B60BFB4255FE0534F /* LocalCredentialUsageProvider.swift in Sources */,
 				28B24BD020D1AAC8526800F4 /* LoginShell.swift in Sources */,
 				8597B0E645748C8C99EE5B25 /* MenuBarIconRenderer.swift in Sources */,
+				3698FC7BD0604CAC9CE2F6CD /* UsageMenuRowView.swift in Sources */,
 				F4A73C99BC3743068CCAAFD4 /* PreferencesView.swift in Sources */,
 				9A54F84A0DA08E9396351A31 /* ScreenLocator.swift in Sources */,
 				EEDCA121F3ED38D13A5A5D42 /* Segments.swift in Sources */,

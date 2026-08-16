@@ -74,8 +74,9 @@ final class StatusBarController: NSObject {
 
     private func showMenu() {
         let menu = NSMenu()
-        menu.addItem(withTitle: "Open Terminal In…", action: #selector(chooseWorkingDirectory), keyEquivalent: "").target = self
-        menu.addItem(.separator())
+        if appendUsageRows(to: menu) {
+            menu.addItem(.separator())
+        }
         menu.addItem(withTitle: "Preferences…", action: #selector(openPreferences), keyEquivalent: ",").target = self
         menu.addItem(.separator())
         menu.addItem(withTitle: "Quit Claude Snap", action: #selector(quit), keyEquivalent: "q").target = self
@@ -84,15 +85,52 @@ final class StatusBarController: NSObject {
         statusItem.menu = nil
     }
 
-    /// Sets where the *next* session opens, without going through Preferences — the folder takes
-    /// effect the next time the dropdown starts a session (the currently running one, if any,
-    /// keeps its own cwd).
-    @objc private func chooseWorkingDirectory() {
-        guard let path = DirectoryPicker.choose(
-            startingAt: preferences.defaultWorkingDirectory,
-            message: "Pick the folder new terminal sessions should open in."
-        ) else { return }
-        preferences.defaultWorkingDirectory = path
+    /// Appends the session/weekly/extra-usage progress rows. Returns whether anything was added,
+    /// so the caller knows whether it needs a trailing separator before Preferences.
+    private func appendUsageRows(to menu: NSMenu) -> Bool {
+        let usage = poller.snapshot
+        guard usage.isAvailable else { return false }
+
+        appendUsageRow(to: menu, title: "Session (5 hour)", resetText: sessionResetText(usage.windowResetsAt), percent: usage.percentUsed)
+        if let weeklyPercent = usage.weeklyPercentUsed {
+            appendUsageRow(to: menu, title: "Weekly (7 day)", resetText: weeklyResetText(usage.weeklyResetsAt), percent: weeklyPercent)
+        }
+        if let extra = usage.extraUsage {
+            appendUsageRow(to: menu, title: "Extra usage", resetText: extraUsageResetText(), percent: extra.percentUsed)
+        }
+        return true
+    }
+
+    private func appendUsageRow(to menu: NSMenu, title: String, resetText: String, percent: Double) {
+        let item = NSMenuItem()
+        item.view = UsageMenuRowView(title: title, resetText: resetText, percent: percent, barColor: DesignColor.clay)
+        menu.addItem(item)
+    }
+
+    private func sessionResetText(_ date: Date?) -> String {
+        guard let date else { return "" }
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .none
+        return "Resets at \(formatter.string(from: date))"
+    }
+
+    private func weeklyResetText(_ date: Date?) -> String {
+        guard let date else { return "" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM yyyy"
+        return "Resets on \(formatter.string(from: date))"
+    }
+
+    /// The API supplies no reset date for extra usage (unlike the two rate-limit windows) — it's
+    /// a monthly credit pool, so "1st of next month" is computed here instead.
+    private func extraUsageResetText() -> String {
+        let calendar = Calendar.current
+        guard let startOfThisMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date())),
+              let startOfNextMonth = calendar.date(byAdding: .month, value: 1, to: startOfThisMonth) else { return "" }
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        return "Resets \(formatter.string(from: startOfNextMonth))"
     }
 
     @objc private func openPreferences() { onOpenPreferences?() }

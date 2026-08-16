@@ -43,8 +43,18 @@ struct LocalCredentialUsageProvider: UsageProvider {
               let window = decoded.fiveHour,
               let percent = window.utilization else { return nil }
 
-        let resetDate = window.resetsAt.flatMap(Self.parseResetDate)
-        return UsageSnapshot(percentUsed: percent, windowResetsAt: resetDate, isAvailable: true)
+        let extra: ExtraUsageSnapshot? = (decoded.extraUsage?.isEnabled == true)
+            ? decoded.extraUsage?.utilization.map(ExtraUsageSnapshot.init(percentUsed:))
+            : nil
+
+        return UsageSnapshot(
+            percentUsed: percent,
+            windowResetsAt: window.resetsAt.flatMap(Self.parseResetDate),
+            isAvailable: true,
+            weeklyPercentUsed: decoded.sevenDay?.utilization,
+            weeklyResetsAt: decoded.sevenDay?.resetsAt.flatMap(Self.parseResetDate),
+            extraUsage: extra
+        )
     }
 
     private static func parseResetDate(_ string: String) -> Date? {
@@ -70,8 +80,23 @@ private struct RateLimitResponse: Decodable {
             case resetsAt = "resets_at"
         }
     }
+    /// Dollar fields (`used_credits`, `monthly_limit`) are deliberately not decoded: their scale
+    /// (`decimal_places`) is unverified against a real enabled account, and showing a wrong dollar
+    /// figure is worse than not showing one — `utilization` is an unambiguous 0–100 either way.
+    struct ExtraUsage: Decodable {
+        let isEnabled: Bool?
+        let utilization: Double?
+        enum CodingKeys: String, CodingKey {
+            case isEnabled = "is_enabled"
+            case utilization
+        }
+    }
     let fiveHour: Window?
+    let sevenDay: Window?
+    let extraUsage: ExtraUsage?
     enum CodingKeys: String, CodingKey {
         case fiveHour = "five_hour"
+        case sevenDay = "seven_day"
+        case extraUsage = "extra_usage"
     }
 }
