@@ -72,6 +72,10 @@ final class AppPreferences: ObservableObject {
 
     var thresholds: UsageThresholds { UsageThresholds(amber: amberThreshold, red: redThreshold) }
 
+    /// Shared by the Preferences slider and the dropdown's own bottom-edge drag handle, so both
+    /// clamp `screenCoveragePercent` the same way.
+    static let coverageRange: ClosedRange<Double> = 25...95
+
     private enum Keys {
         static let iconStyle = "iconStyle"
         static let screenCoverage = "screenCoveragePercent"

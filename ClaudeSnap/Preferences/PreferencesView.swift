@@ -50,7 +50,7 @@ struct PreferencesView: View {
                     Text("Display with the pointer").tag(DisplayPreference.withPointer)
                     Text("Main display").tag(DisplayPreference.main)
                 }
-                Slider(value: $preferences.screenCoveragePercent, in: 25...95, step: 1) {
+                Slider(value: $preferences.screenCoveragePercent, in: AppPreferences.coverageRange, step: 1) {
                     Text("Height \(Int(preferences.screenCoveragePercent))%")
                 }
                 Slider(value: $preferences.widthPercent, in: 40...100, step: 1) {

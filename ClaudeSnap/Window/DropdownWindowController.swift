@@ -23,6 +23,7 @@ final class DropdownWindowController: NSObject {
     private let containerView: FlippedView
     private let cardView: FlippedView
     private let blurView: NSVisualEffectView
+    private let resizeHandle = ResizeHandleView()
 
     private var globalClickMonitor: Any?
     private var localClickMonitor: Any?
@@ -72,6 +73,9 @@ final class DropdownWindowController: NSObject {
 
         containerView.addSubview(cardView)
         panel.contentView = containerView
+
+        resizeHandle.onDrag = { [weak self] in self?.resizeByDrag() }
+        cardView.addSubview(resizeHandle)
     }
 
     @objc private func screenParametersChanged() {
@@ -89,6 +93,9 @@ final class DropdownWindowController: NSObject {
         view.frame = cardView.bounds
         view.autoresizingMask = [.width, .height]
         cardView.addSubview(view)
+        // Content is embedded after the handle is already a subview, so re-assert z-order on top
+        // of it — otherwise the handle would sit behind the terminal and never receive drags.
+        cardView.addSubview(resizeHandle, positioned: .above, relativeTo: nil)
     }
 
     // MARK: - Show / hide
@@ -137,6 +144,26 @@ final class DropdownWindowController: NSObject {
         panel.setFrame(rect, display: true)
         containerView.frame = NSRect(origin: .zero, size: rect.size)
         cardView.frame = NSRect(origin: .zero, size: rect.size)
+        // Flipped card, so the bottom edge is `bounds.height`, not `bounds.origin.y`.
+        resizeHandle.frame = NSRect(x: 0, y: rect.height - ResizeHandleView.thickness, width: rect.width, height: ResizeHandleView.thickness)
+    }
+
+    /// Grows/shrinks the panel from its bottom edge only — the top stays flush under the menu bar,
+    /// same as every other resize path here. Writes straight to `screenCoveragePercent` so the
+    /// Preferences slider and this handle are always in sync, and so the size survives relaunch
+    /// the same way a slider drag would.
+    private func resizeByDrag() {
+        guard let screen = ScreenLocator.screenForPanel(preference: preferences.displayPreference) else { return }
+        let menuBarHeight = max(0, screen.frame.maxY - screen.visibleFrame.maxY)
+        let usableHeight = screen.frame.height - menuBarHeight
+        guard usableHeight > 0 else { return }
+
+        // Absolute pointer position rather than accumulated `event.deltaY`: no sign ambiguity, and
+        // the panel edge can't drift away from the cursor once a drag clamps at the range ends.
+        let height = screen.frame.maxY - menuBarHeight - NSEvent.mouseLocation.y
+        let range = AppPreferences.coverageRange
+        preferences.screenCoveragePercent = min(range.upperBound, max(range.lowerBound, height / usableHeight * 100))
+        positionPanel()
     }
 
     // MARK: - Animation
