@@ -42,7 +42,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.statusBarController = statusBarController
         dropdownController.statusItemWindow = statusBarController.buttonWindow
 
-        HotkeyManager.registerToggleHandler(toggle)
+        HotkeyManager.registerToggleHandler(toggle, preferences: preferences)
 
         // Timers don't fire while the Mac is asleep, so on wake the held reading can be hours old
         // and the next poll is however far the backoff had grown.

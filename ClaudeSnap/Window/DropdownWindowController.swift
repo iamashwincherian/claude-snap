@@ -27,7 +27,6 @@ final class DropdownWindowController: NSObject {
 
     private var globalClickMonitor: Any?
     private var localClickMonitor: Any?
-    private var keyMonitor: Any?
     private var contentViewController: NSViewController?
 
     /// The status item button's window. Clicks there must be left entirely to
@@ -259,7 +258,7 @@ final class DropdownWindowController: NSObject {
         CATransaction.commit()
     }
 
-    // MARK: - Dismiss on outside click / Escape
+    // MARK: - Dismiss on outside click
 
     private func installOutsideDismissMonitors() {
         globalClickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
@@ -276,20 +275,11 @@ final class DropdownWindowController: NSObject {
             self.hide()
             return event
         }
-        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
-            guard let self else { return event }
-            if event.keyCode == 53 { // Escape
-                self.hide()
-                return nil
-            }
-            return event
-        }
     }
 
     private func removeOutsideDismissMonitors() {
-        [globalClickMonitor, localClickMonitor, keyMonitor].compactMap { $0 }.forEach(NSEvent.removeMonitor)
+        [globalClickMonitor, localClickMonitor].compactMap { $0 }.forEach(NSEvent.removeMonitor)
         globalClickMonitor = nil
         localClickMonitor = nil
-        keyMonitor = nil
     }
 }

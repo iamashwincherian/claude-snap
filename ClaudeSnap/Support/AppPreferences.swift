@@ -25,6 +25,11 @@ enum DisplayPreference: String, CaseIterable {
     case main
 }
 
+enum HotkeyMode: String, CaseIterable {
+    case doubleControlTap
+    case custom
+}
+
 /// UserDefaults-backed, observable preferences store. Single source of truth read by the status
 /// bar icon, the dropdown panel, and the Preferences window.
 @MainActor
@@ -48,6 +53,7 @@ final class AppPreferences: ObservableObject {
         didSet { defaults.set(statusLineSegmentDisabled.map(\.rawValue), forKey: Keys.segmentDisabled) }
     }
     @Published var liveStatusLineEnabled: Bool { didSet { defaults.set(liveStatusLineEnabled, forKey: Keys.liveStatusLineEnabled) } }
+    @Published var hotkeyMode: HotkeyMode { didSet { defaults.set(hotkeyMode.rawValue, forKey: Keys.hotkeyMode) } }
     /// Where the terminal opened last — set only via `rememberWorkingDirectory`, never directly,
     /// so `$HOME` can't leak in and become a permanent fallback.
     @Published private(set) var lastWorkingDirectory: String? { didSet { defaults.set(lastWorkingDirectory, forKey: Keys.lastWorkingDirectory) } }
@@ -88,6 +94,7 @@ final class AppPreferences: ObservableObject {
         static let segmentOrder = "statusLineSegmentOrder"
         static let segmentDisabled = "statusLineSegmentDisabled"
         static let liveStatusLineEnabled = "liveStatusLineEnabled"
+        static let hotkeyMode = "hotkeyMode"
         static let lastWorkingDirectory = "lastWorkingDirectory"
         static let defaultWorkingDirectory = "defaultWorkingDirectory"
     }
@@ -109,6 +116,7 @@ final class AppPreferences: ObservableObject {
                 .compactMap(StatusLineSegmentID.init(rawValue:))
         )
         liveStatusLineEnabled = defaults.object(forKey: Keys.liveStatusLineEnabled) as? Bool ?? false
+        hotkeyMode = HotkeyMode(rawValue: defaults.string(forKey: Keys.hotkeyMode) ?? "") ?? .doubleControlTap
         // A pre-existing `$HOME` value here is discarded: earlier builds stored it, which pinned
         // the fallback to the one directory whose trust prompt never stops reappearing.
         let storedLast = defaults.string(forKey: Keys.lastWorkingDirectory)

@@ -1,6 +1,6 @@
 # <img src="ClaudeSnap/Resources/octopus.svg" width="36" height="32" align="center" alt="">&nbsp;&nbsp;ClaudeSnap
 
-macOS status bar app for Claude Code — shows live usage, opens a Quake-style dropdown terminal on hotkey (Ctrl+`), and provides session management with working directory persistence.
+macOS status bar app for Claude Code — shows live usage, opens a Quake-style dropdown terminal on hotkey (double-tap Control), and provides session management with working directory persistence.
 
 ## Installation
 
@@ -40,7 +40,7 @@ cp -r ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/Release/
 
 **Launch:** Open `/Applications/ClaudeSnap.app` or add it to Login Items for auto-start.
 
-**Hotkey:** Press **Ctrl+`** to toggle the dropdown terminal.
+**Hotkey:** Double-tap **Control** to toggle the dropdown terminal (configurable in Preferences → Hotkey, where you can swap in a custom key instead).
 
 **Menu Bar Icons:**
 - Click the icon to toggle the terminal

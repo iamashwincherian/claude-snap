@@ -24,7 +24,13 @@ struct PreferencesView: View {
             }
 
             Section("Hotkey") {
-                KeyboardShortcuts.Recorder("Toggle terminal:", name: .toggleTerminal)
+                Picker("Toggle terminal", selection: $preferences.hotkeyMode) {
+                    Text("Double-tap Control").tag(HotkeyMode.doubleControlTap)
+                    Text("Custom key").tag(HotkeyMode.custom)
+                }
+                if preferences.hotkeyMode == .custom {
+                    KeyboardShortcuts.Recorder("Key:", name: .toggleTerminal)
+                }
             }
 
             Section("Terminal") {
