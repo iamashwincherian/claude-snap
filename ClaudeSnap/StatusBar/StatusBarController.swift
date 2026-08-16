@@ -221,8 +221,9 @@ final class StatusBarController: NSObject {
             let reset = UsageFormat.resetString(usage)
             if !reset.isEmpty { text += " · " + reset }
         }
+        let textColor = level == .red ? DesignColor.red : NSColor.white
         let attrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: level.nsColor,
+            .foregroundColor: textColor,
             .font: NSFont.monospacedDigitSystemFont(ofSize: 11.5, weight: .regular)
         ]
         return NSAttributedString(string: text, attributes: attrs)

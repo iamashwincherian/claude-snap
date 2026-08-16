@@ -21,17 +21,12 @@ struct UsageSnapshot: Equatable {
     /// the poller won't back off over it: recovery is a Keychain read away once the user logs in.
     static let signedOut = UsageSnapshot(percentUsed: 0, windowResetsAt: nil, isAvailable: false, failureIsTransient: false)
 
-    /// The window driving the menu bar: whichever rate-limit window sits closest to its cap.
-    /// Rendering only `five_hour` shows a calm green while the weekly window is nearly spent, and
-    /// the user finds out by getting cut off. Extra usage is deliberately excluded — it's a spend
-    /// pool rather than a throttle, and the breakdown menu shows it on its own row.
-    var headlinePercent: Double { max(percentUsed, weeklyPercentUsed ?? 0) }
+    /// The window driving the menu bar: always the 5-hour session. Weekly and extra usage ride
+    /// along on the same poll for the right-click menu's breakdown only.
+    var headlinePercent: Double { percentUsed }
 
-    /// The reset date belonging to `headlinePercent`, so the icon's countdown describes the same
-    /// window as its percentage.
-    var headlineResetsAt: Date? {
-        (weeklyPercentUsed ?? 0) > percentUsed ? weeklyResetsAt : windowResetsAt
-    }
+    /// The reset date belonging to `headlinePercent`.
+    var headlineResetsAt: Date? { windowResetsAt }
 
     /// A reading is only true until the first of its windows rolls over; past that its percentages
     /// describe a window that no longer exists. Matters because the poller holds the last good
