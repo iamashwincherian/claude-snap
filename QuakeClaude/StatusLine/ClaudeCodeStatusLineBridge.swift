@@ -1,7 +1,7 @@
 import Foundation
 
 /// The subset of Claude Code's `statusLine` hook JSON (fed to the hook command on stdin) that
-/// Claude Snap's model/ctx/cost segments need. Full shape includes `workspace`, `rate_limits`,
+/// Quake Code's model/ctx/cost segments need. Full shape includes `workspace`, `rate_limits`,
 /// etc. — see `~/.claude/statusline-command.sh` for a fuller consumer.
 struct ClaudeCodeStatusLinePayload: Decodable, Equatable {
     struct Model: Decodable, Equatable { let displayName: String
@@ -25,13 +25,13 @@ struct ClaudeCodeStatusLinePayload: Decodable, Equatable {
 
 /// Claude Code has no API for a running session's model/context/cost — the only place that data
 /// exists is the JSON fed to the user's `statusLine` hook command. This installs a wrapper script
-/// that tees that JSON to a file Claude Snap can read, then forwards the original stdin to
+/// that tees that JSON to a file Quake Claude can read, then forwards the original stdin to
 /// whatever command was already configured (so the user's own status line output, e.g. a colored
 /// bar printed in the CLI, is unaffected). Opt-in only, since it edits `~/.claude/settings.json`.
 enum ClaudeCodeStatusLineBridge {
     static let dataFileURL = FileManager.default
         .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("ClaudeSnap", isDirectory: true)
+        .appendingPathComponent("QuakeClaude", isDirectory: true)
         .appendingPathComponent("statusline.json")
 
     private static let claudeDir = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".claude", isDirectory: true)
@@ -75,8 +75,8 @@ enum ClaudeCodeStatusLineBridge {
         let forward = originalCommand.map { "printf '%s' \"$input\" | \($0)" } ?? ""
         return """
         #!/bin/bash
-        # Installed by Claude Snap. Captures the statusLine JSON for the app, then forwards it
-        # unchanged to whatever statusLine command was configured before Claude Snap ran.
+        # Installed by Quake Code. Captures the statusLine JSON for the app, then forwards it
+        # unchanged to whatever statusLine command was configured before Quake Code ran.
         input=$(cat)
         printf '%s' "$input" > "\(dataFileURL.path)"
         \(forward)

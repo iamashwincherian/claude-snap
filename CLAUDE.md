@@ -1,20 +1,20 @@
-# ClaudeSnap
+# Quake Claude
 
 macOS status bar app for Claude Code—shows live usage, opens a Quake-style dropdown terminal on hotkey (Ctrl+`), and provides session management with working directory persistence.
 
 ## Build & Test
 
 ```bash
-xcodebuild build -scheme ClaudeSnap -configuration Debug
-# Runs from: ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/Debug/ClaudeSnap.app
-open ClaudeSnap.app
+xcodebuild build -scheme QuakeClaude -configuration Debug
+# Runs from: ~/Library/Developer/Xcode/DerivedData/QuakeClaude-*/Build/Products/Debug/QuakeClaude.app
+open QuakeClaude.app
 ```
 
 Kill and relaunch during development:
 ```bash
-pkill -f "ClaudeSnap.app/Contents/MacOS/ClaudeSnap"
-xcodebuild build -scheme ClaudeSnap -configuration Debug && \
-open "$(find ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/Debug -name "ClaudeSnap.app" -type d | head -1)"
+pkill -f "QuakeClaude.app/Contents/MacOS/QuakeClaude"
+xcodebuild build -scheme QuakeClaude -configuration Debug && \
+open "$(find ~/Library/Developer/Xcode/DerivedData/QuakeClaude-*/Build/Products/Debug -name "QuakeClaude.app" -type d | head -1)"
 ```
 
 ## Architecture
@@ -38,7 +38,7 @@ open "$(find ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/D
 
 ### Live Status Line (Optional)
 - `ClaudeCodeStatusLineBridge`: Wraps `~/.claude/settings.json` `statusLine.command` to capture JSON hook output
-- `ClaudeCodeStatusLineWatcher`: Polls `~/Library/Application Support/ClaudeSnap/statusline.json` every 2s for model/context%/cost
+- `ClaudeCodeStatusLineWatcher`: Polls `~/Library/Application Support/QuakeClaude/statusline.json` every 2s for model/context%/cost
 - Integrated into terminal status bar if enabled in Preferences
 
 ### Session Lifecycle
@@ -65,22 +65,22 @@ open "$(find ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/D
 
 ## Files to Know
 
-- `ClaudeSnap/App/AppDelegate.swift`: Entry point, status bar setup
-- `ClaudeSnap/Window/DropdownWindowController.swift`: Animation, event handling
-- `ClaudeSnap/Terminal/TerminalViewController.swift`: SwiftTerm integration, session lifecycle
-- `ClaudeSnap/StatusBar/StatusBarController.swift`: Menu bar icon + text, polling wiring
-- `ClaudeSnap/StatusBar/MenuBarIconRenderer.swift`: Icon drawing
-- `ClaudeSnap/Usage/UsagePoller.swift`: Polling loop, backoff, transient failure handling
-- `ClaudeSnap/Usage/LocalCredentialUsageProvider.swift`: OAuth token, HTTP fetch, response decode
-- `ClaudeSnap/Support/AppPreferences.swift`: Settings persistence
-- `ClaudeSnap/Preferences/PreferencesView.swift`: Settings UI
+- `QuakeClaude/App/AppDelegate.swift`: Entry point, status bar setup
+- `QuakeClaude/Window/DropdownWindowController.swift`: Animation, event handling
+- `QuakeClaude/Terminal/TerminalViewController.swift`: SwiftTerm integration, session lifecycle
+- `QuakeClaude/StatusBar/StatusBarController.swift`: Menu bar icon + text, polling wiring
+- `QuakeClaude/StatusBar/MenuBarIconRenderer.swift`: Icon drawing
+- `QuakeClaude/Usage/UsagePoller.swift`: Polling loop, backoff, transient failure handling
+- `QuakeClaude/Usage/LocalCredentialUsageProvider.swift`: OAuth token, HTTP fetch, response decode
+- `QuakeClaude/Support/AppPreferences.swift`: Settings persistence
+- `QuakeClaude/Preferences/PreferencesView.swift`: Settings UI
 
 ## Testing
 
 **Usage logic self-check** (headline window selection, snapshot expiry, poller hold/backoff):
 ```bash
 swiftc -o /tmp/usagechecks \
-  ClaudeSnap/Support/{UsageSnapshot,UsageProvider,UsagePoller,DesignColor}.swift \
+  QuakeClaude/Support/{UsageSnapshot,UsageProvider,UsagePoller,DesignColor}.swift \
   Tests/UsageChecks.swift && /tmp/usagechecks
 ```
 

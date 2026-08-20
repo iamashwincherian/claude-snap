@@ -1,4 +1,4 @@
-# <img src="ClaudeSnap/Resources/octopus.svg" width="36" height="32" align="center" alt="">&nbsp;&nbsp;ClaudeSnap
+# <img src="QuakeClaude/Resources/octopus.svg" width="36" height="32" align="center" alt="">&nbsp;&nbsp;Quake Claude
 
 macOS status bar app for Claude Code — shows live usage, opens a Quake-style dropdown terminal on hotkey (double-tap Control), and provides session management with working directory persistence.
 
@@ -7,19 +7,19 @@ macOS status bar app for Claude Code — shows live usage, opens a Quake-style d
 ### From Latest Release (Recommended)
 
 ```bash
-curl -s https://raw.githubusercontent.com/iamashwincherian/claude-snap/main/install.sh | bash
+curl -s https://raw.githubusercontent.com/iamashwincherian/quake-code/main/install.sh | bash
 ```
 
 Or download and run the installer:
 ```bash
-curl -O https://raw.githubusercontent.com/iamashwincherian/claude-snap/main/install.sh
+curl -O https://raw.githubusercontent.com/iamashwincherian/quake-code/main/install.sh
 chmod +x install.sh
 ./install.sh
 ```
 
-> **Note:** ClaudeSnap isn't notarized by Apple (that requires a paid Developer account), so if you install it manually instead of via `install.sh` — e.g. downloading the zip from a browser and dragging it to Applications — macOS Gatekeeper may say the app "is damaged and can't be opened." It isn't actually damaged; that's just Gatekeeper reacting to the quarantine flag on an unnotarized app. Fix it with:
+> **Note:** Quake Claude isn't notarized by Apple (that requires a paid Developer account), so if you install it manually instead of via `install.sh` — e.g. downloading the zip from a browser and dragging it to Applications — macOS Gatekeeper may say the app "is damaged and can't be opened." It isn't actually damaged; that's just Gatekeeper reacting to the quarantine flag on an unnotarized app. Fix it with:
 > ```bash
-> xattr -cr /Applications/ClaudeSnap.app
+> xattr -cr /Applications/QuakeClaude.app
 > ```
 
 ### Build from Source
@@ -30,15 +30,15 @@ chmod +x install.sh
 - Swift 5.0+
 
 ```bash
-git clone https://github.com/iamashwincherian/claude-snap.git
-cd claude-snap
-xcodebuild build -scheme ClaudeSnap -configuration Release
-cp -r ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/Release/ClaudeSnap.app /Applications/
+git clone https://github.com/iamashwincherian/quake-code.git
+cd quake-code
+xcodebuild build -scheme QuakeClaude -configuration Release
+cp -r ~/Library/Developer/Xcode/DerivedData/QuakeClaude-*/Build/Products/Release/QuakeClaude.app /Applications/
 ```
 
 ## Usage
 
-**Launch:** Open `/Applications/ClaudeSnap.app` or add it to Login Items for auto-start.
+**Launch:** Open `/Applications/QuakeClaude.app` or add it to Login Items for auto-start.
 
 **Hotkey:** Double-tap **Control** to toggle the dropdown terminal (configurable in Preferences → Hotkey, where you can swap in a custom key instead).
 
@@ -104,12 +104,12 @@ cp -r ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/Release/
 
 ```bash
 # Build Debug
-xcodebuild build -scheme ClaudeSnap -configuration Debug
+xcodebuild build -scheme QuakeClaude -configuration Debug
 
 # Build & run
-pkill -f "ClaudeSnap.app/Contents/MacOS/ClaudeSnap" || true
-xcodebuild build -scheme ClaudeSnap -configuration Debug && \
-open "$(find ~/Library/Developer/Xcode/DerivedData/ClaudeSnap-*/Build/Products/Debug -name "ClaudeSnap.app" -type d | head -1)"
+pkill -f "QuakeClaude.app/Contents/MacOS/QuakeClaude" || true
+xcodebuild build -scheme QuakeClaude -configuration Debug && \
+open "$(find ~/Library/Developer/Xcode/DerivedData/QuakeClaude-*/Build/Products/Debug -name "QuakeClaude.app" -type d | head -1)"
 ```
 
 See [`CLAUDE.md`](CLAUDE.md) for more details on architecture, testing, and constraints.

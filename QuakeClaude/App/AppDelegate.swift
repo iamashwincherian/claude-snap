@@ -58,7 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func openPreferences() {
         if preferencesWindow == nil {
             let window = NSWindow(contentViewController: NSHostingController(rootView: PreferencesView(preferences: preferences)))
-            window.title = "Claude Snap Preferences"
+            window.title = "Quake Code Preferences"
             window.styleMask = [.titled, .closable]
             window.isReleasedWhenClosed = false
             preferencesWindow = window

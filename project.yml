@@ -1,4 +1,4 @@
-name: ClaudeSnap
+name: QuakeClaude
 options:
   bundleIdPrefix: dev.ashwincherian
   deploymentTarget:
@@ -15,7 +15,7 @@ settingGroups:
     base:
       SWIFT_VERSION: "5.0"
       MACOSX_DEPLOYMENT_TARGET: "13.0"
-      PRODUCT_BUNDLE_IDENTIFIER: dev.ashwincherian.ClaudeSnap
+      PRODUCT_BUNDLE_IDENTIFIER: dev.ashwincherian.QuakeClaude
       ENABLE_HARDENED_RUNTIME: YES
       CODE_SIGN_STYLE: Automatic
       DEVELOPMENT_TEAM: "88V8YTB2ZK"
@@ -34,27 +34,28 @@ packages:
     from: 1.0.0
 
 targets:
-  ClaudeSnap:
+  QuakeClaude:
     type: application
     platform: macOS
     deploymentTarget: "13.0"
     sources:
-      - path: ClaudeSnap
+      - path: QuakeClaude
         excludes:
           - "Resources/Assets.xcassets"
           - "Resources/Info.plist"
-      - path: ClaudeSnap/Resources/Assets.xcassets
+      - path: QuakeClaude/Resources/Assets.xcassets
     info:
-      path: ClaudeSnap/Resources/Info.plist
+      path: QuakeClaude/Resources/Info.plist
       properties:
         LSUIElement: true
         NSHighResolutionCapable: true
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
+        CFBundleDisplayName: "Quake Claude"
         NSHumanReadableCopyright: ""
-        NSAppleEventsUsageDescription: "Claude Snap reads the working directory of your frontmost Finder or editor window so the terminal opens in the right place."
+        NSAppleEventsUsageDescription: "Quake Claude reads the working directory of your frontmost Finder or editor window so the terminal opens in the right place."
     entitlements:
-      path: ClaudeSnap/Resources/ClaudeSnap.entitlements
+      path: QuakeClaude/Resources/QuakeClaude.entitlements
       properties:
         com.apple.security.app-sandbox: false
         com.apple.security.automation.apple-events: true

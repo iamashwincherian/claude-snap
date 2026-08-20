@@ -3,11 +3,11 @@ import Foundation
 /// Claude Code exposes no API for "is the current session generating a response" — hooks are the
 /// only place that state surfaces. `UserPromptSubmit` fires right as a prompt starts processing,
 /// `Stop` fires when the agent hands control back, so installing both to flip a one-byte flag file
-/// gives Claude Snap a working/idle signal with no polling of Claude Code itself required.
+/// gives Quake Claude a working/idle signal with no polling of Claude Code itself required.
 enum ClaudeWorkingStateBridge {
     static let stateFileURL = FileManager.default
         .urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-        .appendingPathComponent("ClaudeSnap", isDirectory: true)
+        .appendingPathComponent("QuakeClaude", isDirectory: true)
         .appendingPathComponent("working", isDirectory: false)
 
     private static let claudeDir = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".claude", isDirectory: true)

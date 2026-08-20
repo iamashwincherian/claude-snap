@@ -1,6 +1,6 @@
 import AppKit
 
-/// Fixed palette pulled from the Claude Snap design spec — not theme-dependent.
+/// Fixed palette pulled from the Quake Code design spec — not theme-dependent.
 enum DesignColor {
     static let green = NSColor(srgbHex: 0x3ECF6A)
     static let amber = NSColor(srgbHex: 0xE9A23B)

@@ -82,7 +82,7 @@ final class StatusBarController: NSObject {
         }
         menu.addItem(withTitle: "Preferences…", action: #selector(openPreferences), keyEquivalent: ",").target = self
         menu.addItem(.separator())
-        menu.addItem(withTitle: "Quit Claude Snap", action: #selector(quit), keyEquivalent: "q").target = self
+        menu.addItem(withTitle: "Quit Quake Code", action: #selector(quit), keyEquivalent: "q").target = self
         statusItem.menu = menu
         statusItem.button?.performClick(nil)
         statusItem.menu = nil

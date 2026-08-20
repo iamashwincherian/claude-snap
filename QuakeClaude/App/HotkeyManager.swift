@@ -8,7 +8,7 @@ extension KeyboardShortcuts.Name {
 @MainActor
 enum HotkeyManager {
     /// The double-tap-Control detector needs to see `flagsChanged` both while some other app is
-    /// frontmost (global monitor) and while ClaudeSnap's own panel is key (local monitor) — a
+    /// frontmost (global monitor) and while Quake Claude's own panel is key (local monitor) — a
     /// global monitor alone goes blind the moment our own window has focus.
     private static var globalMonitor: Any?
     private static var localMonitor: Any?
